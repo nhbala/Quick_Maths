@@ -79,7 +79,7 @@ def cv_imgs(imgpath):
         exp_stuff = [x,y,w,h]
         exp_lst.append(exp_stuff)
         cv2.imwrite(str(comp) + '.jpg', roi)
-        cv2.imwrite(str(comp) + 'seeing.jpg', roi)
+        # cv2.imwrite(str(comp) + 'seeing.jpg', roi)
 
         new_img = cv2.imread(str(comp) + '.jpg', cv2.IMREAD_GRAYSCALE)
         #No need to write locally?
@@ -94,11 +94,11 @@ def cv_imgs(imgpath):
             resize_img = resize2SquareKeepingAspectRation(final, w-60, interpolation = cv2.INTER_AREA)
         else:
             resize_img = resize2SquareKeepingAspectRation(final, h, interpolation = cv2.INTER_AREA)
-        # dilation = cv2.dilate(resize_img,np.ones((5,5),np.uint8),iterations = 1)
-        resize_img = resize2SquareKeepingAspectRation(resize_img, 26, interpolation = cv2.INTER_AREA)
+        dilation = cv2.dilate(resize_img,np.ones((5,5),np.uint8),iterations = 1)
+        resize_img = resize2SquareKeepingAspectRation(dilation, 26, interpolation = cv2.INTER_AREA)
         constant = cv2.copyMakeBorder(resize_img, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=[0,0,0])
 
-        cv2.imwrite(str(comp) + '.jpg', constant)
+        # cv2.imwrite(str(comp) + '.jpg', constant)
         pic_lst.append(constant)
     cv2.imwrite("bounded.png", img)
     return pic_lst, exp_lst
