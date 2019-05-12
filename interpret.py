@@ -73,6 +73,11 @@ def handlePi(s):
                 s = s[:i] + "math.pi" + s[i+2:]
     return s
 
+sample = "51n(pi/6)+51n(a)=1"
+sample2 = "51n(pi/6)"
+sample3 = "3+4"
+sample4 = "a**2+64=100"
+
 def interpret(s):
     print("At interepret, s is:"+str(type(s)))
     s,record, weird = trig(s)
@@ -89,7 +94,33 @@ def interpret(s):
         print("this is 1 " + equals[0])
         print("this is 2 " + equals[1])
         answer = solveset(Eq(parse_expr(equals[0]),parse_expr(equals[1])),a,domain=S.Reals)
-        solveset(Eq(parse_expr("sin(pi/6)+sin(a)"),parse_expr("1")),a,domain=S.Reals)
+        if str(type(answer)) == "<class 'sympy.sets.sets.Union'>":
+            components = answer.args
+            answers = []
+            for c in components:
+                answers.append(str(c.args[0].args[1]).split(" ")[-1])
+            return answers
+        return answer
+    else:
+        print("Final string is:" + s)
+        return eval(s)
+
+def interpret_old(s):
+    print("At interepret, s is:"+str(type(s)))
+    s,record, weird = trig(s)
+    s = handleE(s)
+    s = handlePi(s)
+    s = poly(s)
+    equals = s.split("=")
+    if len(equals) > 2:
+        print("Goofed")
+    elif len(equals) == 2:
+        a = Symbol("a")
+        equals[0] = remove_math(equals[0])
+        equals[1] = remove_math(equals[1])
+        print("this is 1 " + equals[0])
+        print("this is 2 " + equals[1])
+        answer = solveset(Eq(parse_expr(equals[0]),parse_expr(equals[1])),a,domain=S.Reals)
         print(str(answer))
         if weird:
             answer2 = ""
