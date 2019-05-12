@@ -3,6 +3,13 @@ from sympy import *
 from sympy.parsing.sympy_parser import parse_expr
 import math
 
+def remove_math(s):
+    split = s.split("math.")
+    final_str = ""
+    for i in split:
+        final_str += i
+    return final_str
+
 #figure out if trig functions are involved in equation
 def trig(s):
     print("At trig, s is:"+str(type(s)))
@@ -77,7 +84,12 @@ def interpret(s):
         print("Goofed")
     elif len(equals) == 2:
         a = Symbol("a")
+        equals[0] = remove_math(equals[0])
+        equals[1] = remove_math(equals[1])
+        print("this is 1 " + equals[0])
+        print("this is 2 " + equals[1])
         answer = solveset(Eq(parse_expr(equals[0]),parse_expr(equals[1])),a,domain=S.Reals)
+        solveset(Eq(parse_expr("sin(pi/6)+sin(a)"),parse_expr("1")),a,domain=S.Reals)
         print(str(answer))
         if weird:
             answer2 = ""
