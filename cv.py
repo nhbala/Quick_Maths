@@ -21,33 +21,14 @@ def resize2SquareKeepingAspectRation(img, size, interpolation):
 
 def cv_imgs(imgpath):
     img = cv2.imread(imgpath)
-
     morph = img.copy()
     morph = cv2.fastNlMeansDenoising(img)
-
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
-    morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, kernel)
-    morph = cv2.morphologyEx(morph, cv2.MORPH_OPEN, kernel)
-
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 15))
-
-    # take morphological gradient
-    gradient_image = cv2.morphologyEx(morph, cv2.MORPH_GRADIENT, kernel)
-
-    gray = cv2.cvtColor(gradient_image, cv2.COLOR_BGR2GRAY)
-
-    #take this out?
-    img_grey = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel)
-
-    # blur = cv2.medianBlur(img_grey,3)
-
-
-    ret, thing = cv2.threshold(img_grey, 0.0, 255.0, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-    img_dilation = cv2.dilate(thing, kernel, iterations=3)
-
-    # cv2.imwrite("check_equal.jpg", img_dilation)
-
+    gray = cv2.cvtColor(morph, cv2.COLOR_BGR2GRAY)
+    gradient_image = cv2.morphologyEx(gray, cv2.MORPH_GRADIENT, kernel)
+    blur = cv2.medianBlur(gradient_image,3)
+    ret, thing = cv2.threshold(blur, 160, 255.0, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    img_dilation = cv2.dilate(thing, kernel, iterations=4)
     conturs_lst = cv2.findContours(img_dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 
@@ -78,12 +59,12 @@ def cv_imgs(imgpath):
 
         exp_stuff = [x,y,w,h]
         exp_lst.append(exp_stuff)
-        cv2.imwrite(str(comp) + '.jpg', roi)
+        # cv2.imwrite(str(comp) + '.jpg', roi)
         # cv2.imwrite(str(comp) + 'seeing.jpg', roi)
 
-        new_img = cv2.imread(str(comp) + '.jpg', cv2.IMREAD_GRAYSCALE)
+        # new_img = cv2.imread(str(comp) + '.jpg', cv2.IMREAD_GRAYSCALE)
         #No need to write locally?
-        # new_img = cv2.cvtColor(roi, cv2.COLOR_RGB2GRAY)
+        new_img = cv2.cvtColor(roi, cv2.COLOR_RGB2GRAY)
 
         thresh, im_bw = cv2.threshold(new_img, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         final = cv2.bitwise_not(im_bw)
@@ -100,5 +81,5 @@ def cv_imgs(imgpath):
 
         # cv2.imwrite(str(comp) + '.jpg', constant)
         pic_lst.append(constant)
-    cv2.imwrite("bounded.png", img)
+    # cv2.imwrite("bounded.png", img)
     return pic_lst, exp_lst

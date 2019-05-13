@@ -41,20 +41,3 @@ def expo(coor_lst):
         else:
             expo_lst.append(0)
     return expo_lst
-
-# def cluster(coor_lst):
-#     X = np.zeros((len(coor_lst),2))
-#     for i in range(len(coor_lst)):
-#         X[i][0] = coor_lst[i][1] + coor_lst[i][3]
-#         X[i][1] = 0
-#     print(X)
-#     km = KMeans(n_clusters=2,
-#     init='random',
-#     n_init=10,
-#     max_iter=300,
-#     tol=1e-04,
-#     random_state=0)
-#     y_km = km.fit_predict(X)
-#     return y_km
-
-# cluster(sample3)

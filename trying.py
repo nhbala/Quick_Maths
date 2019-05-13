@@ -37,14 +37,24 @@ index_value_dict = {
     "21": "/"
 }
 
+equals_minus_dict = {
+    "0": "=",
+    "1": "-"
+}
 
 
 def get_rep(image):
-    yaml_file = open('finalmodel.yaml', 'r')
+    yaml_file = open('models/finalmodel.yaml', 'r')
     loaded_model_yaml = yaml_file.read()
     yaml_file.close()
     loaded_model = model_from_yaml(loaded_model_yaml)
-    loaded_model.load_weights("finalmodel.h5")
+    loaded_model.load_weights("models/finalmodel.h5")
+
+    # yaml_file = open('test1.yaml', 'r')
+    # loaded_model_yaml = yaml_file.read()
+    # yaml_file.close()
+    # loaded_model = model_from_yaml(loaded_model_yaml)
+    # loaded_model.load_weights("test1.h5")
 
 
     im = image
@@ -60,4 +70,15 @@ def get_rep(image):
     return_value = index_value_dict[str(result[0])]
     if return_value == "1":
         return_value = gradient(im)
+    if return_value == "=" or return_value == "-":
+        yaml_file = open('models/minusequals.yaml', 'r')
+        loaded_model_yaml = yaml_file.read()
+        yaml_file.close()
+        loaded_model = model_from_yaml(loaded_model_yaml)
+        loaded_model.load_weights("models/minusequals.h5")
+        final = loaded_model.predict(batch, batch_size=1)
+        lmao = max(final[0])
+        result = [i for i, j in enumerate(final[0]) if j == lmao]
+        return_value = equals_minus_dict[str(result[0])]
+
     return return_value

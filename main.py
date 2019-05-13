@@ -2,12 +2,13 @@ from cv import cv_imgs
 from trying import get_rep
 from exponent import expo
 from interpret import interpret
+import sys
 
 
 
 
-if __name__ == "__main__":
-    curr_lst, exp_lst = cv_imgs('pictures/handwritten.JPG')
+def main():
+    curr_lst, exp_lst = cv_imgs(sys.argv[1])
     #1 is exp, 0 != exp
     is_exp = expo(exp_lst)
     final_array = []
@@ -39,3 +40,6 @@ if __name__ == "__main__":
     print('Your Equation is: ' + final_str)
     eval = interpret(final_str)
     print(eval)
+
+if __name__ == "__main__":
+    main()
