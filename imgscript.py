@@ -5,7 +5,7 @@ import cv2
 import pandas as pd
 
 
-path = "/Users/nathanbala/Downloads/extracted_images/forward_slash"
+path = "/Users/nathanbala/Downloads/extracted_images/-"
 
 index_value_dict = {
     "10": ")",
@@ -34,9 +34,9 @@ dict = {
     "21": "/"
 }
 
-onevsslash = {
-    "0": "1",
-    "1": "/"
+equals_minus_dict = {
+    "0": "=",
+    "1": "-"
 }
 
 
@@ -77,7 +77,7 @@ for image_path in os.listdir(path):
     final = final.astype(int)
     large_array.append(final)
 
-f=open('onevsslash.csv','ab')
+f=open('equalsminus.csv','ab')
 np.savetxt(f,large_array, delimiter=',', fmt='%u')
 
 # df_train  = pd.read_csv("finalfuck.csv")

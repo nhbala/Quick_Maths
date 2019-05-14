@@ -19,16 +19,31 @@ def resize2SquareKeepingAspectRation(img, size, interpolation):
     mask[y_pos:y_pos+h, x_pos:x_pos+w, :] = img[:h, :w, :]
   return cv2.resize(mask, (size, size), interpolation)
 
+
 def cv_imgs(imgpath):
     img = cv2.imread(imgpath)
     morph = img.copy()
     morph = cv2.fastNlMeansDenoising(img)
+    # cv2.imwrite("denoise.png", morph)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 15))
     gray = cv2.cvtColor(morph, cv2.COLOR_BGR2GRAY)
+    # cv2.imwrite("gray.png", gray)
     gradient_image = cv2.morphologyEx(gray, cv2.MORPH_GRADIENT, kernel)
+    # cv2.imwrite("morphology.png", gradient_image)
+
     blur = cv2.medianBlur(gradient_image,3)
-    ret, thing = cv2.threshold(blur, 160, 255.0, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    img_dilation = cv2.dilate(thing, kernel, iterations=4)
+    # cv2.imwrite("blur.png", blur)
+
+    ret, thing = cv2.threshold(blur, 5, 255.0, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+
+    th3 = cv2.adaptiveThreshold(thing,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+            cv2.THRESH_BINARY_INV,11,2)
+    # cv2.imwrite("threshold.png", th3)
+
+
+    img_dilation = cv2.dilate(th3, kernel, iterations=4)
+    # cv2.imwrite("dilate.png", img_dilation)
     conturs_lst = cv2.findContours(img_dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 
@@ -81,5 +96,5 @@ def cv_imgs(imgpath):
 
         # cv2.imwrite(str(comp) + '.jpg', constant)
         pic_lst.append(constant)
-    # cv2.imwrite("bounded.png", img)
+    cv2.imwrite("bounded.png", img)
     return pic_lst, exp_lst

@@ -44,17 +44,27 @@ equals_minus_dict = {
 
 
 def get_rep(image):
-    yaml_file = open('models/finalmodel.yaml', 'r')
-    loaded_model_yaml = yaml_file.read()
-    yaml_file.close()
-    loaded_model = model_from_yaml(loaded_model_yaml)
-    loaded_model.load_weights("models/finalmodel.h5")
 
-    # yaml_file = open('test1.yaml', 'r')
+    #option 2
+    # yaml_file = open('models/finalmodel.yaml', 'r')
     # loaded_model_yaml = yaml_file.read()
     # yaml_file.close()
     # loaded_model = model_from_yaml(loaded_model_yaml)
-    # loaded_model.load_weights("test1.h5")
+    # loaded_model.load_weights("models/finalmodel.h5")
+
+    #option 1
+    yaml_file = open('models/test1.yaml', 'r')
+    loaded_model_yaml = yaml_file.read()
+    yaml_file.close()
+    loaded_model = model_from_yaml(loaded_model_yaml)
+    loaded_model.load_weights("models/test1.h5")
+
+    #option 3
+    # yaml_file = open('models/lotsofiter.yaml', 'r')
+    # loaded_model_yaml = yaml_file.read()
+    # yaml_file.close()
+    # loaded_model = model_from_yaml(loaded_model_yaml)
+    # loaded_model.load_weights("models/lotsofiter.h5")
 
 
     im = image

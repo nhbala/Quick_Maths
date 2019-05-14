@@ -102,6 +102,8 @@ def interpret(s):
             return answers
         return answer
     else:
+        if "math.math" in s:
+            s = s.replace("math.math", "math")
         print("Final string is:" + s)
         return eval(s)
 
